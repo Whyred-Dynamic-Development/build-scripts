@@ -7,7 +7,7 @@ jobs:
   build-kernel:
     docker:
       - image: ubuntu:latest
-
+    resource_class: xlarge
     steps:
       - run:
           name: "Download Dependencies"
