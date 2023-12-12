@@ -12,12 +12,20 @@ jobs:
       - run:
           name: "Download Dependencies"
           command: "apt-get update && apt-get install -y bison build-essential bc bison curl libssl-dev git zip python2 python3 flex cpio libncurses5-dev wget ccache default-jre"
+      - restore_cache:
+          keys: 
+          - ccache
+      - run:
+          name: "Setup ccache"
+          command: |
+            ccache --show-stats
+            ccache -z
       - run:
           name: "Clone kernel"
           command: git clone https://github.com/Whyred-Dynamic-Development/san_kernel_sdm660_4 ./ --depth=1
       - run:
           name: "Build Whyred Kernel"
-          command: "./build.sh whyred"
+          command: "./build.sh whyred ccache"
       - run:
           name: "Upload Whyred Kernel"
           command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"          
@@ -26,10 +34,14 @@ jobs:
           command: "make mrproper && rm -rf .config && rm -rf out/arch/arm64/boot && git reset --hard"
       - run:
           name: "Build Tulip Kernel"
-          command: "./build.sh tulip"    
+          command: "./build.sh tulip ccache"    
       - run:
           name: "Upload Tulip Kernel"
           command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"
+      - save_cache:
+          key: 'ccache'
+          paths: [ "/home/circleci/.ccache" ]
+        
 workflows:
   my_workflow:
     jobs:
