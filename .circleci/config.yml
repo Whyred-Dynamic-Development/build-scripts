@@ -23,7 +23,7 @@ jobs:
           command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"          
       - run:
           name: "Clean"
-          command: "make mrproper && rm -rf .config"
+          command: "make mrproper && rm -rf .config && rm -rf out/arch/arm64/boot"
       - run:
           name: "Build Tulip Kernel"
           command: "./build.sh tulip"    
