@@ -14,7 +14,7 @@ jobs:
           command: "apt-get update && apt-get install -y bison build-essential bc bison curl libssl-dev git zip python2 python3 flex cpio libncurses5-dev wget ccache default-jre"
       - restore_cache:
           keys: 
-          - ccache-whyred
+          - ccache
       - run:
           name: "Setup ccache"
           command: |
@@ -27,27 +27,24 @@ jobs:
           command: git clone https://github.com/Whyred-Dynamic-Development/san_kernel_sdm660_4 ./ --depth=1
       - run:
           name: "Build Whyred Kernel"
-          command: "./build.sh whyred ccache"
+          command: "./build.sh whyred ccache ksu"
       - run:
           name: "Upload Whyred Kernel"
-          command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"          
-      - save_cache:
-          key: 'ccache-whyred'
-          paths: [ "/home/circleci/.ccache" ]     
-      - restore_cache:
-          keys: 
-          - ccache-tulip
+          command: "mv out/arch/arm64/boot/Image.gz-dtb ./whyred-ksu-Image.gz-dtb && curl --upload-file ./whyred-ksu-Image.gz-dtb https://transfer.sh"          
       - run:
           name: "Clean"
-          command: "make mrproper && rm -rf .config && rm -rf out/arch/arm64/boot && git reset --hard"
+          command: "git reset --hard"
       - run:
           name: "Build Tulip Kernel"
-          command: "./build.sh tulip ccache"    
+          command: "./build.sh tulip ccache ksu"    
       - run:
           name: "Upload Tulip Kernel"
-          command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"    
+          command: "mv out/arch/arm64/boot/Image.gz-dtb ./tulip-ksu-Image.gz-dtb && curl --upload-file ./tulip-ksu-Image.gz-dtb https://transfer.sh"          
+     - run:
+          name: "CCACHE stats"
+          command: "ccache -s"
       - save_cache:
-          key: 'ccache-tulip'
+          key: 'ccache'
           paths: [ "/home/circleci/.ccache" ]
         
 workflows:
