@@ -7,7 +7,6 @@ jobs:
   build-kernel:
     docker:
       - image: ubuntu:latest
-      
     resource_class: large
     steps:
       - run:
@@ -41,7 +40,7 @@ jobs:
       - run:
           name: "Upload Tulip Kernel"
           command: "mv out/arch/arm64/boot/Image.gz-dtb ./tulip-ksu-Image.gz-dtb && curl --upload-file ./tulip-ksu-Image.gz-dtb https://transfer.sh"          
-     - run:
+      - run:
           name: "CCACHE stats"
           command: "ccache -s"
       - save_cache:
