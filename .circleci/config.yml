@@ -30,7 +30,7 @@ jobs:
           command: "./build.sh whyred ccache"
       - run:
           name: "Upload Whyred Kernel"
-          command: "mv out/arch/arm64/boot/Image.gz-dtb ./whyred-Image.gz-dtb && curl --upload-file ./whyred-Image.gz-dtb https://free.keep.sh       
+          command: "mv out/arch/arm64/boot/Image.gz-dtb ./whyred-Image.gz-dtb && curl --upload-file ./whyred-Image.gz-dtb https://free.keep.sh"       
       - save_cache:
           key: 'ccache-whyred-1'
           paths: [ "/home/circleci/.ccache" ]     
