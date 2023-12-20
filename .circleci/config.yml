@@ -14,7 +14,7 @@ jobs:
           command: "apt-get update && apt-get install -y bison build-essential bc bison curl libssl-dev git zip python2 python3 flex cpio libncurses5-dev wget ccache default-jre"
       - restore_cache:
           keys: 
-          - ccache-whyred
+          - ccache-whyred-1
       - run:
           name: "Setup ccache"
           command: |
@@ -36,7 +36,7 @@ jobs:
           paths: [ "/home/circleci/.ccache" ]     
       - restore_cache:
           keys: 
-          - ccache-tulip
+          - ccache-tulip-1
       - run:
           name: "Clean"
           command: "git reset --hard && rm -rf .config"
@@ -45,7 +45,7 @@ jobs:
           command: "./build.sh tulip ccache"    
       - run:
           name: "Upload Whyred Kernel"
-          command: "mv out/arch/arm64/boot/Image.gz-dtb ./tulip-Image.gz-dtb && curl --upload-file ./tulip-Image.gz-dtb https://free.keep.sh      
+          command: "mv out/arch/arm64/boot/Image.gz-dtb ./tulip-Image.gz-dtb && curl --upload-file ./tulip-Image.gz-dtb https://free.keep.sh"
       - save_cache:
           key: 'ccache-tulip-1'
           paths: [ "/home/circleci/.ccache" ]
