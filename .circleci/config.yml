@@ -32,14 +32,14 @@ jobs:
           name: "Upload Whyred Kernel"
           command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"          
       - save_cache:
-          key: 'ccache-whyred'
+          key: 'ccache-whyred-1'
           paths: [ "/home/circleci/.ccache" ]     
       - restore_cache:
           keys: 
           - ccache-tulip
       - run:
           name: "Clean"
-          command: "make mrproper && rm -rf .config && rm -rf out/arch/arm64/boot && git reset --hard"
+          command: "git reset --hard"
       - run:
           name: "Build Tulip Kernel"
           command: "./build.sh tulip ccache"    
@@ -47,7 +47,7 @@ jobs:
           name: "Upload Tulip Kernel"
           command: "curl --upload-file out/arch/arm64/boot/Image.gz-dtb https://transfer.sh"    
       - save_cache:
-          key: 'ccache-tulip'
+          key: 'ccache-tulip-1'
           paths: [ "/home/circleci/.ccache" ]
         
 workflows:
